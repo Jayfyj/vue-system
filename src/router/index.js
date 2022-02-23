@@ -4,13 +4,13 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-// // 找到 publicResource目录下的所有route文件
-// const routesfiles = require.context('@/views/publicResource', true, /\/route\.js$/)
-// // 把里面的路由拼接成一个，赋值给路由对象的route
-// const publicResourceRoutes = routesfiles.keys().reduce(
-//   (pre, key) => [...pre, ...routesfiles(key).default],
-//   [],
-// )
+// 找到 publicResource目录下的所有route文件
+const routesfiles = require.context('@/views', true, /\/route\.js$/)
+// 把里面的路由拼接成一个，赋值给路由对象的route
+const allRoutes = routesfiles.keys().reduce(
+  (pre, key) => [...pre, ...routesfiles(key).default],
+  [],
+)
 
 
 const originalPush = VueRouter.prototype.push
@@ -34,6 +34,7 @@ const routes = [
       component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
       meta: { title: '自述文件' },
       children: [
+          ...allRoutes,
           {
               path: '/dashboard',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),

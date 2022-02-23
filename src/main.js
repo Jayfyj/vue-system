@@ -13,6 +13,9 @@ const i18n = new VueI18n({
     messages
 });
 
+//引入mock
+const Mock = require('@/mock')
+
 //引入图标样式
 import './assets/css/icon.css';
 

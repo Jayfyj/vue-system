@@ -6,7 +6,7 @@ import router from '@/router'  //引入router
 
 const baseURL = ''
 axios.defaults.baseURL = baseURL; // 配置axios请求的地址
-axios.defaults.timeout = 30000;
+// axios.defaults.timeout = 30000;
 // axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 // axios.defaults.crossDomain = true;
 // axios.defaults.withCredentials = true;  //设置cross跨域 并设置访问权限 允许跨域携带cookie信息
@@ -56,22 +56,24 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     // removePending(response.config);  //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
-
     //拦截响应，做统一处理 
-    if (response.data.code) {
-      // switch (response.data.code) {
-      //   case 1002:
-      //     store.state.isLogin = false
-      //     router.replace({
-      //       path: 'login',
-      //       query: {
-      //         redirect: router.currentRoute.fullPath
-      //       }
-      //     })
-      // }
-      // console.log(response.data.code)
+    // if (response.data.code) {
+    //   switch (response.data.code) {
+    //     case 1002:
+    //       store.state.isLogin = false
+    //       router.replace({
+    //         path: 'login',
+    //         query: {
+    //           redirect: router.currentRoute.fullPath
+    //         }
+    //       })
+    //   }
+    //   console.log(response.data.code)
+    // }
+    if(response.data.code === '0000'){
+      return response.data.data
     }
-    return response
+    // return response
   },
   //接口错误状态处理，也就是说无响应时的处理
   error => {
