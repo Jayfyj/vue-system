@@ -73,21 +73,19 @@ module.exports = {
       .set('@components', resolve('src/components'))
       .set('@assets', resolve('src/assets'))
 
-    // config.when(process.env.VUE_APP_CURRENTENV !== "development", (config) => {
-    //   // 需要排除的包(以下包不会进行打包,以下包通过cdn进行引入)
-    //   config.set("externals", {
-    //     vue: "Vue",
-    //     "vue-router": "VueRouter",
-    //     axios: "axios",
-    //     vuex: "Vuex",
-    //     vuedraggable: "vuedraggable",
-    //     echarts: "echarts",
-    //     vant: 'vant',
-    //     zepto: '$',
-    //     // 'mint-ui': 'mint-ui',
+    config.when(process.env.VUE_APP_CURRENTENV !== "development", (config) => {
+      // 需要排除的包(以下包不会进行打包,以下包通过cdn进行引入)
+      config.set("externals", {
+        vue: "Vue",
+        "vue-router": "VueRouter",
+        axios: "axios",
+        vuex: "Vuex",
+        vuedraggable: "vuedraggable",
+        echarts: "echarts",
+        'element-ui':'element-ui'
 
-    //   });
-    // });
+      });
+    });
 
     //压缩图片
     const imagesRule = config.module.rule('images')
