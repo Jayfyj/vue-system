@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import bus from '../common/bus'
+import bus from './bus'
 import vSidebarItem from './SidebarItem.vue'
 import { menuUrl } from './api'
 import router from '@/router'

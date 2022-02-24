@@ -36,20 +36,11 @@ const routes = [
       children: [
           ...allRoutes,
           {
-              path: '/dashboard',
-              component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
-              meta: { title: '系统首页' }
-          },
-          {
               path: '/icon',
               component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
               meta: { title: '自定义图标' }
           },
-          {
-              path: '/table',
-              component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-              meta: { title: '基础表格' }
-          },
+         
           {
               path: '/table1',
               component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable1.vue'),

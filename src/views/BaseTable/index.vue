@@ -131,9 +131,11 @@
 </template>
 
 <script>
-import { fetchData } from '@/api'
+import { fetchData } from './api'
+import { ref, reactive, onMounted } from '@vue/composition-api'
+
 export default {
-  name: 'basetable',
+  name: 'BaseTable',
   data() {
     return {
       query: {

@@ -87,7 +87,7 @@ import { tableDataUrl, tabjsonUrl } from './api'
 import { ref, reactive, onMounted } from '@vue/composition-api'
 
 export default {
-  name: 'allSelectTable',
+  name: 'AllSelectTable',
   setup() {
     //请求参数
     let query = reactive({

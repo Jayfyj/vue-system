@@ -6,10 +6,9 @@
  export default [
     {
       path: '/allSelectTable',
-      name: 'allSelectTable',
+      name: 'AllSelectTable',
       component: () => import('./index'),
       meta: {
-        keepAlive: false,
         title:'全选数据表格'
       }
     }

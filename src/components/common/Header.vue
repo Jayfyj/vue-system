@@ -59,41 +59,48 @@
 </template>
 <script>
 import bus from '../common/bus'
-import { ref, reactive, computed } from '@vue/composition-api'
+import router from '@/router'
+import { ref, computed, onMounted } from '@vue/composition-api'
 
 export default {
   name: 'Header',
-  data() {
-    return {
-      collapse: false,
-      fullscreen: false,
-      name: 'linxin',
-      message: 2
-    }
-  },
-  computed: {
-    username() {
+  setup() {
+    //收缩
+    let collapse = ref(false)
+
+    //全屏
+    let fullscreen = ref(false)
+
+    //名字
+    let name = ref('linxin')
+
+    //提醒消息
+    let message = ref(2)
+
+    //用户名字
+    const username = computed(() => {
       let username = localStorage.getItem('ms_username')
-      return username ? username : this.name
+      return username ? username : name.value
+    })
+
+    // 侧边栏折叠
+    function collapseChage() {
+      collapse.value = !collapse.value
+      bus.$emit('collapse', collapse.value)
     }
-  },
-  methods: {
+
     // 用户名下拉菜单选择事件
-    handleCommand(command) {
+    function handleCommand(command) {
       if (command == 'loginout') {
         localStorage.removeItem('ms_username')
-        this.$router.push('/login')
+        router.push('/login')
       }
-    },
-    // 侧边栏折叠
-    collapseChage() {
-      this.collapse = !this.collapse
-      bus.$emit('collapse', this.collapse)
-    },
+    }
+
     // 全屏事件
-    handleFullScreen() {
+    function handleFullScreen() {
       let element = document.documentElement
-      if (this.fullscreen) {
+      if (fullscreen.value) {
         if (document.exitFullscreen) {
           document.exitFullscreen()
         } else if (document.webkitCancelFullScreen) {
@@ -115,12 +122,23 @@ export default {
           element.msRequestFullscreen()
         }
       }
-      this.fullscreen = !this.fullscreen
+      fullscreen.value = !fullscreen.value
     }
-  },
-  mounted() {
-    if (document.body.clientWidth < 1500) {
-      this.collapseChage()
+
+    onMounted(() => {
+      if (document.body.clientWidth < 1500) {
+        collapseChage()
+      }
+    })
+
+    return {
+      collapse,
+      fullscreen,
+      username,
+      message,
+      collapseChage,
+      handleCommand,
+      handleFullScreen
     }
   }
 }
