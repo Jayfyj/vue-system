@@ -3,43 +3,43 @@ import Mock from 'mockjs'
 const data = {
   'menu':[
     {
-      icon: 'el-icon-lx-home',
+      icon: 'el-icon-house',
       index: 'dashboard',
       title: '系统首页',
       subs: null
     },
     {
-      icon: 'el-icon-lx-cascades',
+      icon: 'el-icon-tickets',
       index: 'table',
       title: '基础表格',
       subs: null
     },
     {
-      icon: 'el-icon-lx-cascades',
+      icon: 'el-icon-tickets',
       index: 'allSelectTable',
       title: '选中所有表格',
       subs: null
     },
     {
-      icon: 'el-icon-lx-cascades',
+      icon: 'el-icon-tickets',
       index: 'table1',
       title: '基础表格1',
       subs: null
     },
     {
-      icon: 'el-icon-lx-cascades',
+      icon: 'el-icon-tickets',
       index: 'formTest',
       title: '表单测试',
       subs: null
     },
     {
-      icon: 'el-icon-lx-copy',
+      icon: 'el-icon-s-grid',
       index: 'tabs',
       title: 'tab选项卡',
       subs: null
     },
     {
-      icon: 'el-icon-lx-calendar',
+      icon: 'el-icon-rank',
       index: '3',
       title: '表单相关',
       subs: [
@@ -72,7 +72,7 @@ const data = {
       ]
     },
     {
-      icon: 'el-icon-lx-emoji',
+      icon: 'el-icon-magic-stick',
       index: 'icon',
       title: '自定义图标',
       subs: null
@@ -101,13 +101,13 @@ const data = {
       ]
     },
     {
-      icon: 'el-icon-lx-global',
+      icon: 'el-icon-rank',
       index: 'i18n',
       title: '国际化功能',
       subs: null
     },
     {
-      icon: 'el-icon-lx-warn',
+      icon: 'el-icon-rank',
       index: '7',
       title: '错误处理',
       subs: [
@@ -124,13 +124,13 @@ const data = {
       ]
     },
     {
-      icon: 'el-icon-lx-redpacket_fill',
+      icon: 'el-icon-rank',
       index: '/donate',
       title: '支持作者',
       subs: null
     },
     {
-      icon: 'el-icon-lx-redpacket_fill',
+      icon: 'el-icon-rank',
       index: '/tinymec',
       title: 'tinymec富文本',
       subs: null

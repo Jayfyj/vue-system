@@ -13,7 +13,6 @@
           >输出选中数据</el-button
         >
       </div>
-      <!-- <el-checkbox :checked="checked" :indeterminate="indeterminate" @change="change"></el-checkbox> -->
 
       <el-table
         :data="tableData.value"
@@ -72,8 +71,8 @@
         <el-pagination
           background
           layout="total, prev, pager, next"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
+          :current-page="query.value.pageIndex"
+          :page-size="query.value.pageSize"
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>

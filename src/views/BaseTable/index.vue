@@ -17,7 +17,7 @@
           >批量删除</el-button
         >
         <el-select
-          v-model="query.address"
+          v-model="query.value.address"
           placeholder="地址"
           class="handle-select mr10"
         >
@@ -25,7 +25,7 @@
           <el-option key="2" label="湖南省" value="湖南省"></el-option>
         </el-select>
         <el-input
-          v-model="query.name"
+          v-model="query.value.name"
           placeholder="用户名"
           class="handle-input mr10"
         ></el-input>
@@ -34,7 +34,7 @@
         >
       </div>
       <el-table
-        :data="tableData"
+        :data="tableData.value"
         border
         class="table"
         ref="multipleTable"
@@ -104,8 +104,8 @@
         <el-pagination
           background
           layout="total, prev, pager, next"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
+          :current-page="query.value.pageIndex"
+          :page-size="query.value.pageSize"
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>
@@ -114,12 +114,12 @@
 
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-      <el-form ref="form" :model="form" label-width="70px">
+      <el-form ref="form" :model="form.value" label-width="70px">
         <el-form-item label="用户名">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.value.name"></el-input>
         </el-form-item>
         <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
+          <el-input v-model="form.value.address"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -133,88 +133,126 @@
 <script>
 import { fetchData } from './api'
 import { ref, reactive, onMounted } from '@vue/composition-api'
+import { MessageBox, Message } from 'element-ui'
 
 export default {
   name: 'BaseTable',
-  data() {
-    return {
-      query: {
+  setup() {
+    let query = reactive({
+      value: {
         address: '',
         name: '',
         pageIndex: 1,
         pageSize: 10
-      },
-      tableData: [],
-      multipleSelection: [],
-      delList: [],
-      editVisible: false,
-      pageTotal: 0,
-      form: {},
-      idx: -1,
-      id: -1
-    }
-  },
-  created() {
-    // console.log(123);
-    this.getData()
-  },
-  methods: {
+      }
+    })
+
+    let tableData = reactive({ value: [] })
+
+    let multipleSelection = reactive({ value: [] })
+
+    let delList = reactive({ value: [] })
+
+    let editVisible = ref(false)
+
+    let pageTotal = ref(0)
+
+    let form = reactive({ value: {} })
+
+    let idx = ref(-1)
+
+    let id = ref(-1)
+
+    onMounted(() => {
+      getData()
+    })
+
     // 获取 easy-mock 的模拟数据
-    getData() {
-      fetchData(this.query).then((res) => {
-        // console.log(res)
-        let { list, pageTotal } = res
-        this.tableData = list
-        this.pageTotal = pageTotal || 50
-      })
-    },
+    const getData = async () => {
+      let res = await fetchData(query.value)
+      // console.log(res)
+      let { list, total } = res
+      tableData.value = list
+      pageTotal.value = total || 50
+    }
+
     // 触发搜索按钮
-    handleSearch() {
-      this.$set(this.query, 'pageIndex', 1)
-      this.getData()
-    },
+    function handleSearch() {
+      query.value.pageIndex = 1
+      getData()
+    }
+
     // 删除操作
-    handleDelete(index, row) {
+    function handleDelete(index, row) {
       // 二次确认删除
-      this.$confirm('确定要删除吗？', '提示', {
+      MessageBox.confirm('确定要删除吗？', '提示', {
         type: 'warning'
       })
         .then(() => {
-          this.$message.success('删除成功')
-          this.tableData.splice(index, 1)
+          Message.success('删除成功')
+          tableData.value.splice(index, 1)
         })
         .catch(() => {})
-    },
+    }
+
     // 多选操作
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    delAllSelection() {
-      const length = this.multipleSelection.length
+    function handleSelectionChange(val) {
+      multipleSelection.value = val
+    }
+
+    //批量删除
+    function delAllSelection() {
+      const length = multipleSelection.value.length
       let str = ''
-      this.delList = this.delList.concat(this.multipleSelection)
+      delList.value = delList.value.concat(multipleSelection.value)
       for (let i = 0; i < length; i++) {
-        str += this.multipleSelection[i].name + ' '
+        str += multipleSelection.value[i].name + ' '
       }
-      this.$message.error(`删除了${str}`)
-      this.multipleSelection = []
-    },
+      Message.error(`删除了${str}`)
+      multipleSelection.value = []
+    }
+
     // 编辑操作
-    handleEdit(index, row) {
-      this.idx = index
-      this.form = row
-      this.editVisible = true
-    },
+    function handleEdit(index, row) {
+      idx.value = index
+      form.value = row
+      editVisible.value = true
+    }
+
     // 保存编辑
-    saveEdit() {
-      this.editVisible = false
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`)
-      this.$set(this.tableData, this.idx, this.form)
-    },
+    function saveEdit() {
+      editVisible.value = false
+      Message.success(`修改第 ${idx.value + 1} 行成功`)
+      // this.$set(this.tableData, this.idx, this.form)
+      let index = idx.value
+      tableData.value[index] = form.value
+    }
+
     // 分页导航
-    handlePageChange(val) {
-      this.$set(this.query, 'pageIndex', val)
-      this.getData()
+    function handlePageChange(val) {
+      // this.$set(this.query, 'pageIndex', val)
+      query.value.pageIndex = val
+      getData()
+    }
+
+    return {
+      query,
+      tableData,
+      multipleSelection,
+      delList,
+      editVisible,
+      pageTotal,
+      form,
+      idx,
+      id,
+      getData,
+      handleSearch,
+      handleDelete,
+      handleSelectionChange,
+      delAllSelection,
+      handleEdit,
+      saveEdit,
+      handlePageChange
     }
   }
 }
