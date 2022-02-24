@@ -16,7 +16,7 @@
       <!-- <el-checkbox :checked="checked" :indeterminate="indeterminate" @change="change"></el-checkbox> -->
 
       <el-table
-        :data="tableData"
+        :data="tableData.value"
         border
         class="table"
         ref="multipleTable"
@@ -83,83 +83,50 @@
 </template>
 
 <script>
-import { tableData, table } from './api'
+import { tableDataUrl, tabjsonUrl } from './api'
+import { ref, reactive, onMounted } from '@vue/composition-api'
+
 export default {
-  name: 'basetable',
-  data() {
-    return {
-      query: {
+  name: 'allSelectTable',
+  setup() {
+    //请求参数
+    let query = reactive({
+      value: {
         address: '',
         name: '',
         pageIndex: 1,
         pageSize: 10
-      },
-      tableData: [],
-      multipleSelection: [],
-      delList: [],
-      editVisible: false,
-      pageTotal: 0,
-      form: {},
-      idx: -1,
-      id: -1,
-      checked: false,
-      indeterminate: false
-    }
-  },
-  created() {
-    this.getData()
-    table().then((res) => {
-      console.log(res)
+      }
     })
-  },
-  mounted() {},
-  methods: {
-    //在渲染表头的时候，会调用此方法，h为createElement的缩写版  添加on.change事件即可
-    renderProductId(createElement) {
-      return createElement('el-checkbox', {
-        // style: 'margin-left: 5px;',
-        on: {
-          change: this.change
-        },
-        props: {
-          value: this.checked,
-          indeterminate: this.indeterminate
-        }
-      })
-    },
-    change(val) {
-      let value = val
-      if (val) {
-        value = true
-        this.multipleSelection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-      } else {
-        value = false
-        this.multipleSelection = []
-      }
-      this.checked = value
-      this.indeterminate = false
-      this.tableData
-      let list = JSON.parse(JSON.stringify(this.tableData))
-      this.tableData = []
-      list.forEach((eles) => {
-        eles.checked = value
-        // this.$set(eles, 'checked', val);
-      })
-      this.tableData = list
-    },
-    // 获取 easy-mock 的模拟数据
-    async getData(val) {
+
+    //数组
+    let tableData = reactive({ value: [] })
+
+    //选终的数组
+    let multipleSelection = reactive({ value: [] })
+
+    //请求的总页数
+    let pageTotal = ref(0)
+
+    //全选勾选
+    let checked = ref(false)
+
+    //勾选的状态
+    let indeterminate = ref(false)
+
+    //请求方式
+    const getData = async (val) => {
       let result = ''
-      this.tableData = []
+      tableData.value = []
       if (val === 2) {
-        result = await table(this.query)
+        result = await tabjsonUrl(query.value)
       } else {
-        result = await tableData(this.query)
+        result = await tableDataUrl(query.value)
       }
-      let { list, pageTotal } = result
-      if (!this.checked) {
-        if (this.multipleSelection.length > 0) {
-          this.multipleSelection.forEach((ele) => {
+      let { list, total } = result
+      if (!checked.value) {
+        if (multipleSelection.value.length > 0) {
+          multipleSelection.value.forEach((ele) => {
             list.forEach((eles) => {
               if (eles.id === ele) {
                 eles.checked = true
@@ -174,41 +141,94 @@ export default {
         })
       }
 
-      this.tableData = list
-      this.pageTotal = pageTotal || 50
-    },
+      tableData.value = list
+      pageTotal.value = total || 50
+    }
 
-    changCheck(row) {
+    //渲染表头
+    function renderProductId(createElement) {
+      return createElement('el-checkbox', {
+        // style: 'margin-left: 5px;',
+        on: {
+          change: change
+        },
+        props: {
+          value: checked.value,
+          indeterminate: indeterminate.value
+        }
+      })
+    }
+
+    //全选勾选
+    function change(val) {
+      let value = val
+      if (val) {
+        value = true
+        multipleSelection.value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      } else {
+        value = false
+        multipleSelection.value = []
+      }
+      checked.value = value
+      indeterminate.value = false
+      let list = JSON.parse(JSON.stringify(tableData.value))
+      tableData.value = []
+      list.forEach((eles) => {
+        eles.checked = value
+      })
+      tableData.value = list
+    }
+
+    //列表勾选
+    function changCheck(row) {
       let { id } = row
-      if (this.multipleSelection.indexOf(id) === -1) {
+      if (multipleSelection.value.indexOf(id) === -1) {
         row.checked = true
-        this.multipleSelection.push(id)
+        multipleSelection.value.push(id)
       } else {
         row.checked = false
-        let index = this.multipleSelection.indexOf(id)
-        this.multipleSelection.splice(index, 1)
+        let index = multipleSelection.value.indexOf(id)
+        multipleSelection.value.splice(index, 1)
       }
 
-      if (this.multipleSelection.length === this.pageTotal) {
-        this.checked = true
-        this.indeterminate = false
-      } else if (this.multipleSelection.length > 0) {
-        this.indeterminate = true
-        this.checked = false
+      if (multipleSelection.value.length === pageTotal.value) {
+        checked.value = true
+        indeterminate.value = false
+      } else if (multipleSelection.value.length > 0) {
+        indeterminate.value = true
+        checked.value = false
       } else {
-        this.checked = false
-        this.indeterminate = false
+        checked.value = false
+        indeterminate.value = false
       }
-    },
+    }
+
     // 触发搜索按钮
-    handleSearch() {
-      console.log(this.multipleSelection)
-    },
+    function handleSearch() {
+      console.log(multipleSelection.value)
+    }
 
     // 分页导航
-    handlePageChange(val) {
-      this.$set(this.query, 'pageIndex', val)
-      this.getData(val)
+    function handlePageChange(val) {
+      getData(val)
+    }
+
+    onMounted(() => {
+      getData()
+    })
+
+    return {
+      query,
+      tableData,
+      multipleSelection,
+      pageTotal,
+      checked,
+      indeterminate,
+      renderProductId,
+      change,
+      changCheck,
+      handleSearch,
+      handlePageChange
     }
   }
 }
@@ -244,15 +264,15 @@ export default {
   height: 40px;
 }
 
-.el-table /deep/.disabledCheck .cell .el-checkbox__inner {
+/* .el-table /deep/.disabledCheck .cell .el-checkbox__inner {
   display: none !important;
 }
 
 .el-table /deep/.disabledCheck .cell:before {
   content: '';
 
-  /* position: absolute; */
+  position: absolute;
 
-  /* right: 11px; */
-}
+  right: 11px;
+} */
 </style>

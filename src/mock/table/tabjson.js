@@ -22,7 +22,7 @@ const data=
             "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
         }
     ],
-    "pageTotal": 12
+    "total": 12
 };
 
 Mock.setup({
