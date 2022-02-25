@@ -74,7 +74,11 @@
               >添加</el-button
             >
           </div>
-          <el-table :show-header="false" :data="todoList" style="width: 100%">
+          <el-table
+            :show-header="false"
+            :data="todoList.value"
+            style="width: 100%"
+          >
             <el-table-column width="40">
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.status"></el-checkbox>
@@ -107,7 +111,7 @@
             ref="bar"
             class="schart"
             canvasId="bar"
-            :options="options"
+            :options="options.value"
           ></schart>
         </el-card>
       </el-col>
@@ -117,7 +121,7 @@
             ref="line"
             class="schart"
             canvasId="line"
-            :options="options2"
+            :options="options2.value"
           ></schart>
         </el-card>
       </el-col>
@@ -128,12 +132,17 @@
 <script>
 import Schart from 'vue-schart'
 // import bus from '@/components/common/bus'
+import { ref, reactive, computed } from '@vue/composition-api'
 export default {
   name: 'Dashboard',
-  data() {
-    return {
-      name: localStorage.getItem('ms_username'),
-      todoList: [
+  components: {
+    Schart
+  },
+  setup() {
+    let name = ref(localStorage.getItem('ms_username'))
+
+    let todoList = reactive({
+      value: [
         {
           title: '今天要修复100个bug',
           status: false
@@ -158,8 +167,11 @@ export default {
           title: '今天要写100行代码加几个bug吧',
           status: true
         }
-      ],
-      data: [
+      ]
+    })
+
+    let data = reactive({
+      value: [
         {
           name: '2018/09/04',
           value: 1083
@@ -188,8 +200,11 @@ export default {
           name: '2018/09/10',
           value: 1065
         }
-      ],
-      options: {
+      ]
+    })
+
+    let options = reactive({
+      value: {
         type: 'bar',
         title: {
           text: '最近一周各品类销售图'
@@ -210,8 +225,11 @@ export default {
             data: [144, 198, 150, 235, 120]
           }
         ]
-      },
-      options2: {
+      }
+    })
+
+    let options2 = reactive({
+      value: {
         type: 'line',
         title: {
           text: '最近几个月各品类销售趋势图'
@@ -232,16 +250,32 @@ export default {
           }
         ]
       }
+    })
+
+    let role = computed(() => {
+      return name.value === 'admin' ? '超级管理员' : '普通用户'
+    })
+
+    function changeDate() {
+      const now = new Date().getTime()
+      data.value.forEach((item, index) => {
+        const date = new Date(now - (6 - index) * 86400000)
+        item.name = `${date.getFullYear()}/${
+          date.getMonth() + 1
+        }/${date.getDate()}`
+      })
     }
-  },
-  components: {
-    Schart
-  },
-  computed: {
-    role() {
-      return this.name === 'admin' ? '超级管理员' : '普通用户'
+
+    return {
+      name,
+      todoList,
+      data,
+      options,
+      options2,
+      role,
+      changeDate
     }
-  },
+  }
   // created() {
   //     this.handleListener();
   //     this.changeDate();
@@ -253,31 +287,31 @@ export default {
   //     window.removeEventListener('resize', this.renderChart);
   //     bus.$off('collapse', this.handleBus);
   // },
-  methods: {
-    changeDate() {
-      const now = new Date().getTime()
-      this.data.forEach((item, index) => {
-        const date = new Date(now - (6 - index) * 86400000)
-        item.name = `${date.getFullYear()}/${
-          date.getMonth() + 1
-        }/${date.getDate()}`
-      })
-    }
-    // handleListener() {
-    //     bus.$on('collapse', this.handleBus);
-    //     // 调用renderChart方法对图表进行重新渲染
-    //     window.addEventListener('resize', this.renderChart);
-    // },
-    // handleBus(msg) {
-    //     setTimeout(() => {
-    //         this.renderChart();
-    //     }, 200);
-    // },
-    // renderChart() {
-    //     this.$refs.bar.renderChart();
-    //     this.$refs.line.renderChart();
-    // }
-  }
+  // methods: {
+  //   changeDate() {
+  //     const now = new Date().getTime()
+  //     this.data.forEach((item, index) => {
+  //       const date = new Date(now - (6 - index) * 86400000)
+  //       item.name = `${date.getFullYear()}/${
+  //         date.getMonth() + 1
+  //       }/${date.getDate()}`
+  //     })
+  //   }
+  // handleListener() {
+  //     bus.$on('collapse', this.handleBus);
+  //     // 调用renderChart方法对图表进行重新渲染
+  //     window.addEventListener('resize', this.renderChart);
+  // },
+  // handleBus(msg) {
+  //     setTimeout(() => {
+  //         this.renderChart();
+  //     }, 200);
+  // },
+  // renderChart() {
+  //     this.$refs.bar.renderChart();
+  //     this.$refs.line.renderChart();
+  // }
+  // }
 }
 </script>
 

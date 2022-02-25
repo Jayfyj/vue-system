@@ -36,9 +36,13 @@ export default {
     //菜单数组
     let menuList = reactive({ value: [] })
 
+    //设置变量用于路由赋值,用于监听路由变化
+    let routers = reactive({ value: router })
+
     //获取当前路由的name
     const onRoutes = computed(() => {
-      let { currentRoute } = router
+      let { currentRoute } = routers.value
+      console.log(currentRoute.path.replace('/', ''))
       return currentRoute.path.replace('/', '')
     })
 

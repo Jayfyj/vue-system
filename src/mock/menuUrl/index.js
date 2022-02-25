@@ -4,6 +4,12 @@ const data = {
   'menu':[
     {
       icon: 'el-icon-house',
+      index: 'developModule',
+      title: '开发说明和方式',
+      subs: null
+    },
+    {
+      icon: 'el-icon-house',
       index: 'dashboard',
       title: '系统首页',
       subs: null
@@ -22,8 +28,8 @@ const data = {
     },
     {
       icon: 'el-icon-tickets',
-      index: 'table1',
-      title: '基础表格1',
+      index: 'wangeditor',
+      title: 'Wangeditor富文本',
       subs: null
     },
     {

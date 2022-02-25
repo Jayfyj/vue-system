@@ -6,12 +6,12 @@
  */
 export default [
     {
-      path: '/devModelFile',
-      name: 'devModelFile',
+      path: '/wangeditor',
+      name: 'Wangeditor',
       component: () => import('./index'),
       meta: {
         keepAlive: false,
-        title:'开发说明和方式'
+        title:'Wangeditor富文本'
         // isFloatBtnShow:true
       }
     }

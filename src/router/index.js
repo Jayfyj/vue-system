@@ -40,17 +40,6 @@ const routes = [
               component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
               meta: { title: '自定义图标' }
           },
-         
-          {
-              path: '/table1',
-              component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable1.vue'),
-              meta: { title: '基础表格1' }
-          },
-          {
-              path: '/formtest',
-              component: () => import(/* webpackChunkName: "table" */ '../components/page/formTest.vue'),
-              meta: { title:'表单测试' }
-          },
           {
               path: '/tabs',
               component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),

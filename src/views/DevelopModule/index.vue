@@ -7,19 +7,16 @@
       <p class="text" v-html="content"></p>
     </div>
     <div class="title">
-      <strong style="color: green">开发两种方法：</strong>
+      <strong style="color: green">开发两种方式</strong>
     </div>
     <div class="step">
       <p class="text">
-        1. 在veiws文件里面，新建文件夹，里面新建 api.js(接口文件),.vue
+        1. 在views文件里面，新建文件夹，里面新建 api.js(接口文件),.vue
         文件(组件页面),route.js(路由文件)
       </p>
       <p class="text">
-        2. 在veiws文件里面，复制devModelFile文件夹（最好重命名）
+        2. 在views文件里面，复制DevelopModule文件夹（最好重命名）
       </p>
-    </div>
-    <div class="btn">
-      <van-button @click="goHome" type="primary">返回首页</van-button>
     </div>
   </div>
 </template>
@@ -29,7 +26,7 @@ import { ref } from '@vue/composition-api'
 import Router from '@/router'
 
 export default {
-  name: 'devModelFile',
+  name: 'DevelopModule',
   setup() {
     //标题
     const title = ref('开发说明')
@@ -65,13 +62,12 @@ export default {
 
 <style scoped lang="scss">
 .index {
-  height: 100vh;
   overflow: hidden;
   overflow-y: auto;
   text-align: center;
-  // padding: 5%;
   > .title {
-    margin-top: 10%;
+    font-size: 38px;
+    margin-top: 30px;
   }
   > .content {
     padding: 0 5%;
