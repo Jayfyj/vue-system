@@ -39,7 +39,7 @@ export default {
       所以本项目已经引入了<strong style="color:green">Vue</strong>的组合API,
       <strong style="color:green">route</strong>和<strong style="color:green">store</strong>因为没有引入，
       所以还是使用<strong style="color:green">vue2</strong>用法，
-      里面的页面都改为使用组合API的写法，不过还是可以使用<strong style="color:green">vue2</strong>的写法，
+      里面的页面部分改为使用组合API的写法，不过还是可以使用<strong style="color:green">vue2</strong>的写法，
       但是还是建议以后开发使用组合API开发。
     `
 
