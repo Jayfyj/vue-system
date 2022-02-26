@@ -103,3 +103,13 @@ compression-webpack-plugin 插件问题:
 ####
 
 ####
+
+#### 使用 git 的小乌龟上传代码问题
+
+# 1）
+
+因为是使用 ssh，进行代买的管理，所以需要对可视化工具进行操作配置 ssh client，步骤：
+
+1.打开工具的 setting，选择 netWork 选项，
+
+2.在 ssh client 填入 git 的 '安装地址\user\bin\ssh.exe',我这里是‘D:\Program Files\Git\usr\bin\ssh.exe’
